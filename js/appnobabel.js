@@ -59,7 +59,7 @@ let jsonData = [
       "3": [
       {
         "name": "ВЫХОДНОЙ",
-        "time": "",
+        "time": "5",
         "teacher": "",
         "cab": ""
       }
@@ -111,7 +111,7 @@ let jsonData = [
       "2": [
       {
         "name": "ВЫХОДНОЙ",
-        "time": "",
+        "time": "5",
         "teacher": "",
         "cab": ""
       }
@@ -119,7 +119,7 @@ let jsonData = [
       "3": [
       {
         "name": "ВЫХОДНОЙ",
-        "time": "",
+        "time": "5",
         "teacher": "",
         "cab": ""
       }
@@ -174,6 +174,15 @@ let jsonData = [
   }
 }
 ];
+let periodTime = [
+{start: '08.30', end: '09.50'},
+{start: '10.15', end: '11.35'},
+{start: '12.15', end: '13.40'},
+{start: '14.00', end: '15.20'},
+{start: '15.45', end: '11.35'},
+{start: '17.30', end: '18.30'},
+{start: '18.40', end: '19.40'},
+]
 let Nav = React.createClass({
  getDay: function(e) {
   this.props.changeDay(e.target.id);
@@ -214,10 +223,11 @@ let List = React.createClass({
     let dataSecondWeek = jsonData[0].timing.second_week[this.props.day];
     let arrFirstWeek = [];
     let arrSecondWeek = [];
+    let currentTime = new Date().toString().substr(16,5)
     for (let keys in dataFirstWeek) {
       arrFirstWeek.push(
         <div key={keys} >
-        <div className="col-xs-12 item">
+        <div className={periodTime[dataFirstWeek[keys].time-1].start < currentTime && currentTime < periodTime[dataFirstWeek[keys].time-1].end ? "col-xs-12 item current" : currentTime > periodTime[dataFirstWeek[keys].time-1].end ? "col-xs-12 item past" : "col-xs-12 item"}>
         <div className="col-xs-3 side"><h5>{dataFirstWeek[keys].time}</h5></div><div className="col-xs-6">
         <h5>{dataFirstWeek[keys].name}</h5>
         <h6>{dataFirstWeek[keys].teacher}</h6>
@@ -232,7 +242,7 @@ let List = React.createClass({
     for (let keys in dataSecondWeek) {
       arrSecondWeek.push(
         <div key={keys} >
-        <div className="col-xs-12 item">
+        <div className={periodTime[dataSecondWeek[keys].time-1].start < currentTime && currentTime < periodTime[dataSecondWeek[keys].time-1].end ? "col-xs-12 item current" : currentTime > periodTime[dataSecondWeek[keys].time-1].end ? "col-xs-12 item past" : "col-xs-12 item"}>
         <div className="col-xs-3 side"><h5>{dataSecondWeek[keys].time}</h5></div><div className="col-xs-6">
         <h5>{dataSecondWeek[keys].name}</h5>
         <h6>{dataSecondWeek[keys].teacher}</h6>
@@ -251,18 +261,18 @@ let List = React.createClass({
         <div className="slider sliderItems">
         <div>
         <div className="col-xs-12 item item-head">
-        <div className="col-xs-6 side"><h5>1 Week</h5></div>
+        <div className="col-xs-6 side"><h5><strong>First week</strong></h5></div>
         <div className="col-xs-6 side">
-        <h5>{this.props.weekDayProp[this.props.day]}</h5>
+        <h5><strong>{this.props.weekDayProp[this.props.day]}</strong></h5>
         </div>
         </div>
         {arrFirstWeek}
         </div>
         <div>
         <div className="col-xs-12 item item-head">
-        <div className="col-xs-6 side"><h5>2 Week</h5></div>
+        <div className="col-xs-6 side"><h5><strong>Second week</strong></h5></div>
         <div className="col-xs-6 side">
-        <h5>{this.props.weekDayProp[this.props.day]}</h5>
+        <h5><strong>{this.props.weekDayProp[this.props.day]}</strong></h5>
         </div>
         </div>
         {arrSecondWeek}
@@ -272,7 +282,10 @@ let List = React.createClass({
         </div>
         );
     }
-    else {
+    if (this.props.timeListShowNeed == true) { 
+      $('.sliderItems').slick('unslick');
+      $('.active').removeClass('active');
+      $('#5').parent().addClass('active');
       return (
         <div className="container">
         <div className="row timing">
@@ -346,15 +359,22 @@ let App = React.createClass({
     };
   },
   componentDidMount: function() {
+    $('.loader').fadeOut();
+    $('.loader_inner').delay(1000).fadeOut('slow');
+    $('body').delay(1000).css({'overflow':'visible'});
     $('.sliderItems').slick({
       arrows: false,
       slidesToShow: 1
     });
-    $('.loader').fadeOut();
-    $('.loader_inner').delay(1000).fadeOut('slow');
-    $('body').delay(1000).css({'overflow':'visible'});
     let currentDay = new Date().getDay()-1;
     $('#'+currentDay).parent().addClass('active');
+  },
+  componentDidUpdate: function() {
+    $('.sliderItems').slick('unslick');
+    $('.sliderItems').slick({
+      arrows: false,
+      slidesToShow: 1
+    });
   },
   setDay: function(day) {
    this.setState({

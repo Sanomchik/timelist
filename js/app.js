@@ -48,7 +48,7 @@ var jsonData = [{
       }],
       "3": [{
         "name": "ВЫХОДНОЙ",
-        "time": "",
+        "time": "5",
         "teacher": "",
         "cab": ""
       }],
@@ -89,13 +89,13 @@ var jsonData = [{
       }],
       "2": [{
         "name": "ВЫХОДНОЙ",
-        "time": "",
+        "time": "5",
         "teacher": "",
         "cab": ""
       }],
       "3": [{
         "name": "ВЫХОДНОЙ",
-        "time": "",
+        "time": "5",
         "teacher": "",
         "cab": ""
       }],
@@ -137,6 +137,7 @@ var jsonData = [{
 
   }
 }];
+var periodTime = [{ start: '08.30', end: '09.50' }, { start: '10.15', end: '11.35' }, { start: '12.15', end: '13.40' }, { start: '14.00', end: '15.20' }, { start: '15.45', end: '11.35' }, { start: '17.30', end: '18.30' }, { start: '18.40', end: '19.40' }];
 var Nav = React.createClass({
   displayName: "Nav",
 
@@ -239,13 +240,14 @@ var List = React.createClass({
     var dataSecondWeek = jsonData[0].timing.second_week[this.props.day];
     var arrFirstWeek = [];
     var arrSecondWeek = [];
+    var currentTime = new Date().toString().substr(16, 5);
     for (var keys in dataFirstWeek) {
       arrFirstWeek.push(React.createElement(
         "div",
         { key: keys },
         React.createElement(
           "div",
-          { className: "col-xs-12 item" },
+          { className: periodTime[dataFirstWeek[keys].time - 1].start < currentTime && currentTime < periodTime[dataFirstWeek[keys].time - 1].end ? "col-xs-12 item current" : currentTime > periodTime[dataFirstWeek[keys].time - 1].end ? "col-xs-12 item past" : "col-xs-12 item" },
           React.createElement(
             "div",
             { className: "col-xs-3 side" },
@@ -287,7 +289,7 @@ var List = React.createClass({
         { key: _keys },
         React.createElement(
           "div",
-          { className: "col-xs-12 item" },
+          { className: periodTime[dataSecondWeek[_keys].time - 1].start < currentTime && currentTime < periodTime[dataSecondWeek[_keys].time - 1].end ? "col-xs-12 item current" : currentTime > periodTime[dataSecondWeek[_keys].time - 1].end ? "col-xs-12 item past" : "col-xs-12 item" },
           React.createElement(
             "div",
             { className: "col-xs-3 side" },
@@ -345,7 +347,11 @@ var List = React.createClass({
                   React.createElement(
                     "h5",
                     null,
-                    "1 Week"
+                    React.createElement(
+                      "strong",
+                      null,
+                      "First week"
+                    )
                   )
                 ),
                 React.createElement(
@@ -354,7 +360,11 @@ var List = React.createClass({
                   React.createElement(
                     "h5",
                     null,
-                    this.props.weekDayProp[this.props.day]
+                    React.createElement(
+                      "strong",
+                      null,
+                      this.props.weekDayProp[this.props.day]
+                    )
                   )
                 )
               ),
@@ -372,7 +382,11 @@ var List = React.createClass({
                   React.createElement(
                     "h5",
                     null,
-                    "2 Week"
+                    React.createElement(
+                      "strong",
+                      null,
+                      "Second week"
+                    )
                   )
                 ),
                 React.createElement(
@@ -381,7 +395,11 @@ var List = React.createClass({
                   React.createElement(
                     "h5",
                     null,
-                    this.props.weekDayProp[this.props.day]
+                    React.createElement(
+                      "strong",
+                      null,
+                      this.props.weekDayProp[this.props.day]
+                    )
                   )
                 )
               ),
@@ -390,7 +408,11 @@ var List = React.createClass({
           )
         )
       );
-    } else {
+    }
+    if (this.props.timeListShowNeed == true) {
+      $('.sliderItems').slick('unslick');
+      $('.active').removeClass('active');
+      $('#5').parent().addClass('active');
       return React.createElement(
         "div",
         { className: "container" },
@@ -567,15 +589,22 @@ var App = React.createClass({
     };
   },
   componentDidMount: function componentDidMount() {
+    $('.loader').fadeOut();
+    $('.loader_inner').delay(1000).fadeOut('slow');
+    $('body').delay(1000).css({ 'overflow': 'visible' });
     $('.sliderItems').slick({
       arrows: false,
       slidesToShow: 1
     });
-    $('.loader').fadeOut();
-    $('.loader_inner').delay(1000).fadeOut('slow');
-    $('body').delay(1000).css({ 'overflow': 'visible' });
     var currentDay = new Date().getDay() - 1;
     $('#' + currentDay).parent().addClass('active');
+  },
+  componentDidUpdate: function componentDidUpdate() {
+    $('.sliderItems').slick('unslick');
+    $('.sliderItems').slick({
+      arrows: false,
+      slidesToShow: 1
+    });
   },
   setDay: function setDay(day) {
     this.setState({
