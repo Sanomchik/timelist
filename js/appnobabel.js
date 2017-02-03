@@ -215,12 +215,12 @@ let periodTime = [
 ]
 let Nav = React.createClass({
  getDay: function(e) {
-  e.preventdefault();
+  e.preventDefault();
   this.props.changeDay(e.target.id);
   this.props.changeStateTimeList(false);
 },
 getTimeList: function(e) {
-  e.preventdefault();
+  e.preventDefault();
   this.props.changeStateTimeList(true);
 },
 render: function () {

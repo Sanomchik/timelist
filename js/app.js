@@ -211,12 +211,12 @@ var Nav = React.createClass({
   displayName: "Nav",
 
   getDay: function getDay(e) {
-    e.preventdefault();
+    e.preventDefault();
     this.props.changeDay(e.target.id);
     this.props.changeStateTimeList(false);
   },
   getTimeList: function getTimeList(e) {
-    e.preventdefault();
+    e.preventDefault();
     this.props.changeStateTimeList(true);
   },
   render: function render() {
