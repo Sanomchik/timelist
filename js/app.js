@@ -206,7 +206,7 @@ var jsonData = [
   }
 }
 ];
-var periodTime = [{ start: '08.30', end: '09.50' }, { start: '10.15', end: '11.35' }, { start: '12.15', end: '13.40' }, { start: '14.00', end: '15.20' }, { start: '15.45', end: '11.35' }, { start: '17.30', end: '18.30' }, { start: '18.40', end: '19.40' }];
+var periodTime = [{ start: '08.30', end: '09.50' }, { start: '10.15', end: '11.35' }, { start: '12.15', end: '13.40' }, { start: '14.00', end: '15.20' }, { start: '15.45', end: '17.05' }, { start: '17.30', end: '18.30' }, { start: '18.40', end: '19.40' }];
 var Nav = React.createClass({
   displayName: "Nav",
 
