@@ -1,5 +1,5 @@
 # timelist
-http://sanomchik.github.io/timelist
+http://heiets.github.io/timelist
 
 ## Change your data 
 
